@@ -438,6 +438,70 @@ a{color:inherit;}
 .drink__ing{font-size:.84rem;line-height:1.5;}
 .carta__nome{font-size:.84rem;}
 .drink__tag{color:rgba(240,232,220,.78);}
+
+/* ===== SECAO DOS PACOTES INVERTIDA (pedido 08/08, ref: cardapio de doces) =====
+   A secao 02 saiu do creme e foi pro --night com texto creme, igual a secao de
+   menus do doces. Os corpos e pesos vem dos blocos LEGIBILIDADE acima -- aqui
+   so se remapeia COR, senao a calibracao de tamanho se perde. Toda cor que
+   dependia de --ink/--accent-txt (tokens escuros) morre no fundo escuro. */
+.menus{padding-block:clamp(3.5rem,9vh,7rem) clamp(2.5rem,6vh,4rem);}
+.menus .sec__head{border-color:var(--line-light);}
+
+/* card do pacote: escuro sobre escuro, separado por borda.
+   O SELECIONADO inverte pra claro -- e o destaque mais forte que existe. */
+.menus .nivel{background:rgba(255,255,255,.045);border-color:rgba(240,232,220,.2);color:var(--cream);}
+.menus .nivel:hover{border-color:rgba(240,232,220,.45);background:rgba(255,255,255,.075);}
+.menus .nivel__res{color:var(--cream);}
+.menus .nivel__preco{color:var(--accent);}
+.menus .nivel__preco small,.menus .legenda,.menus .legenda__txt,
+.menus .carrossel__hint{color:rgba(240,232,220,.82);}
+.menus .nivel__inclui{color:var(--accent);border-top-color:rgba(240,232,220,.18);}
+.menus .nivel[aria-pressed="true"]{background:var(--cream);color:var(--ink);
+  border-color:var(--cream);box-shadow:0 3px 0 var(--accent);}
+.menus .nivel[aria-pressed="true"] .nivel__res{color:var(--ink);}
+.menus .nivel[aria-pressed="true"] .nivel__preco{color:var(--accent-txt);}
+.menus .nivel[aria-pressed="true"] .nivel__preco small{color:var(--ink-soft);}
+.menus .nivel[aria-pressed="true"] .nivel__inclui{color:var(--accent-txt);border-top-color:var(--line-dark);}
+
+/* lista completa e nota, no escuro */
+.menus .carta__head{border-top-color:var(--cream);}
+.menus .carta__nome{color:var(--cream);}
+.menus .carta__n{color:var(--accent);}
+.menus .carta li{border-bottom-color:rgba(240,232,220,.16);}
+.menus .nota{color:rgba(240,232,220,.92);background:rgba(255,255,255,.05);}
+
+/* ===== TRILHO DE FOTOS PINADO (ref: cristal-apresentacao) =====
+   A secao trava na tela e o track anda na horizontal conforme a rolagem
+   vertical. Feito em CSS sticky + transform, SEM GSAP/Lenis: o material e um
+   HTML unico e autocontido, entao nao vale pendurar 70 KB de biblioteca.
+   A altura do .trilho e calculada no JS a partir da largura real do track. */
+.carrossel{margin-top:clamp(2.5rem,6vh,4rem);}
+.carrossel__head{display:flex;align-items:baseline;justify-content:space-between;
+  gap:1rem;flex-wrap:wrap;margin-bottom:clamp(1.2rem,3vh,2rem);}
+.trilho{position:relative;}
+.trilho__pin{position:sticky;top:0;height:100vh;height:100svh;display:flex;align-items:center;overflow:hidden;}
+.trilho .track{overflow:visible;scroll-snap-type:none;padding:0 var(--pad);
+  will-change:transform;gap:clamp(1rem,2vw,1.8rem);}
+/* fotos GRANDES: ocupam a altura util da tela, nao mais um card de 280px */
+.trilho .drink{width:min(86vw,520px);aspect-ratio:1/1.16;}
+.trilho .drink__nome{font-size:clamp(1.5rem,2.6vw,2.05rem);}
+.trilho .drink__ing{font-size:clamp(.86rem,1.1vw,.98rem);}
+.trilho .drink__cap{padding:1.1rem 1.5rem 1.4rem;}
+/* nav invertido enquanto passa por bloco escuro */
+.nav.scrolled.sobre-escuro{background:rgba(20,16,25,.85);border-color:var(--line-light);}
+.nav.scrolled.sobre-escuro .nav__logo{filter:none;}
+.nav.scrolled.sobre-escuro .nav__links a,
+.nav.scrolled.sobre-escuro .nav__burger{color:var(--cream);}
+.nav.scrolled.sobre-escuro .nav__cta{border-color:var(--cream);color:var(--cream);}
+
+/* sem pin (celular / reduced motion): volta a ser rolagem lateral normal */
+.trilho--flat .trilho__pin{position:static;height:auto;overflow-x:auto;}
+.trilho--flat .track{overflow-x:auto;scroll-snap-type:x mandatory;transform:none!important;}
+.trilho--flat .drink{width:min(78vw,420px);scroll-snap-align:start;}
+@media(prefers-reduced-motion:reduce){
+  .trilho__pin{position:static;height:auto;}
+  .trilho .track{overflow-x:auto;transform:none!important;}
+}
 </style>
 </head>
 <body>
@@ -541,30 +605,40 @@ a{color:inherit;}
 </section>
 
 <!-- ===== PACOTES ===== -->
-<section class="menus wrap" id="pacotes">
-  <div class="sec__head">
-    <div class="sec__meta"><span class="num">02</span><p class="eyebrow sec__eyebrow">Escolham o de vocês</p></div>
-    <h2 class="sec__title reveal">Quatro <em>pacotes</em></h2>
-    <p class="sec__lead reveal" data-d="1">De um pacote pro outro, muda a quantidade de drinks. O jeito de servir é sempre o mesmo.</p>
-  </div>
-  <div class="menus__grid" id="menusGrid" role="group" aria-label="Pacotes de open de drinks"></div>
-
-  <div class="carrossel" id="carrossel">
-    <div class="carrossel__head">
-      <h3 class="carrossel__titulo">Conheça o <em id="carrosselNome"></em></h3>
-      <p class="carrossel__hint">Deslize para o lado →</p>
+<section class="menus sec--dark" id="pacotes">
+  <div class="wrap">
+    <div class="sec__head">
+      <div class="sec__meta"><span class="num">02</span><p class="eyebrow sec__eyebrow">Escolham o de vocês</p></div>
+      <h2 class="sec__title reveal">Quatro <em>pacotes</em></h2>
+      <p class="sec__lead reveal" data-d="1">De um pacote pro outro, muda a quantidade de drinks. O jeito de servir é sempre o mesmo.</p>
     </div>
-    <div class="track" id="track"></div>
+    <div class="menus__grid" id="menusGrid" role="group" aria-label="Pacotes de open de drinks"></div>
   </div>
 
-  <div class="carta" id="carta"></div>
-
-  <div class="legenda">
-    <p class="legenda__txt">A bolinha dourada marca os drinks que também existem em versão sem álcool:</p>
-    <span><i class="d d--sa"></i> Também sem álcool</span>
+  <!-- trilho: sai do wrap pra ocupar a tela toda. Fica preso na viewport e as
+       fotos passam de lado conforme a pessoa rola pra baixo (igual o Cristal). -->
+  <div class="carrossel" id="carrossel">
+    <div class="wrap carrossel__head">
+      <h3 class="carrossel__titulo">Conheça o <em id="carrosselNome"></em></h3>
+      <p class="carrossel__hint">Role — as fotos passam de lado</p>
+    </div>
+    <div class="trilho" id="trilho">
+      <div class="trilho__pin">
+        <div class="track" id="track"></div>
+      </div>
+    </div>
   </div>
 
-  <p class="nota">O valor por pessoa diminui conforme o open bar do evento. Tabela completa em <a href="#valores" style="color:var(--accent-txt)">Valores</a>.</p>
+  <div class="wrap">
+    <div class="carta" id="carta"></div>
+
+    <div class="legenda">
+      <p class="legenda__txt">A bolinha dourada marca os drinks que também existem em versão sem álcool:</p>
+      <span><i class="d d--sa"></i> Também sem álcool</span>
+    </div>
+
+    <p class="nota">O valor por pessoa diminui conforme o open bar do evento. Tabela completa em <a href="#valores" style="color:var(--accent)">Valores</a>.</p>
+  </div>
 </section>
 
 <!-- ===== VALORES ===== -->
@@ -815,11 +889,54 @@ function selecionar(id, rolar){
 
   const alvos = [document.getElementById('track'), document.getElementById('carta')];
   alvos.forEach(el=>el.classList.add('trocando'));
-  setTimeout(()=>{ render(p); renderValores(); alvos.forEach(el=>el.classList.remove('trocando')); }, 160);
+  setTimeout(()=>{ render(p); renderValores(); medirTrilho(); alvos.forEach(el=>el.classList.remove('trocando')); }, 160);
 
   if(rolar) document.getElementById('carrossel').scrollIntoView({behavior:'smooth', block:'start'});
 }
+
+/* ---- trilho pinado: a rolagem vertical vira deslocamento horizontal ----
+   O .trilho recebe altura = tela + o quanto o track passa da largura da tela.
+   Enquanto essa altura corre, o .trilho__pin fica grudado (sticky) e o track
+   anda em translate. Sem bibliotecas: e o mesmo efeito do Cristal em CSS+JS.
+   Precisa remedir sempre que o pacote muda (numero de fotos muda). */
+const trilho = document.getElementById('trilho');
+const trilhoTrack = document.getElementById('track');
+let trilhoDist = 0;
+
+/* Quanto a foto anda de lado pra cada pixel rolado. 1 = igual ao Cristal (que
+   tem 7 itens); aqui o Luxo tem 16 drinks e no 1:1 a secao pedia 8.200px de
+   rolagem. 1.4 encurta o percurso sem o movimento ficar seco. UNICO numero a
+   mexer se pedirem "mais rapido" ou "mais devagar". */
+const VEL_TRILHO = 1.4;
+
+function medirTrilho(){
+  const cards = trilhoTrack.children;
+  trilhoTrack.style.transform = 'none';
+  const semPin = matchMedia('(max-width:900px)').matches
+              || matchMedia('(prefers-reduced-motion:reduce)').matches;
+  trilho.classList.toggle('trilho--flat', semPin);
+  if(!cards.length || semPin){ trilho.style.height = ''; trilhoDist = 0; return; }
+  const pad = parseFloat(getComputedStyle(trilhoTrack).paddingLeft) || 0;
+  const a = cards[0].getBoundingClientRect();
+  const b = cards[cards.length - 1].getBoundingClientRect();
+  trilhoDist = Math.max(0, Math.round((b.right - a.left) + pad * 2 - innerWidth));
+  trilho.style.height = (innerHeight + Math.round(trilhoDist / VEL_TRILHO)) + 'px';
+  moverTrilho();
+}
+
+function moverTrilho(){
+  if(!trilhoDist) return;
+  const percurso = trilho.offsetHeight - innerHeight;
+  if(percurso <= 0) return;
+  const p = Math.min(1, Math.max(0, -trilho.getBoundingClientRect().top / percurso));
+  trilhoTrack.style.transform = 'translate3d(' + (-p * trilhoDist).toFixed(1) + 'px,0,0)';
+}
+
+addEventListener('scroll', moverTrilho, {passive:true});
+addEventListener('resize', medirTrilho);
+
 selecionar(atual,false);
+medirTrilho();
 
 /* ---- valores: preco por pacote x open bar do evento ---- */
 const OPEN_BARS = [
@@ -870,9 +987,18 @@ function toggleBar(){
 
 /* ---- nav + progresso ---- */
 const nav = document.getElementById('nav'), prog = document.getElementById('progress');
+/* o nav "scrolled" e claro; sobre bloco escuro ele tem que inverter, senao
+   vira uma barra branca em cima do fundo night */
+const blocosEscuros = [...document.querySelectorAll('.sec--dark,.band,.sig,.frase')];
+function navSobreEscuro(){
+  const limite = nav.offsetHeight || 72;
+  nav.classList.toggle('sobre-escuro',
+    blocosEscuros.some(b=>{ const r=b.getBoundingClientRect(); return r.top<=limite && r.bottom>=0; }));
+}
 function onScroll(){
   const y = window.scrollY;
   nav.classList.toggle('scrolled', y > window.innerHeight*0.8);
+  navSobreEscuro();
   const h = document.documentElement.scrollHeight - window.innerHeight;
   prog.style.width = (h>0 ? (y/h)*100 : 0) + '%';
   toggleBar();
