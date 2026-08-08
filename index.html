@@ -388,6 +388,56 @@ a{color:inherit;}
 .drink--foto .drink__cap::before{top:-5.5rem;
   background:linear-gradient(0deg,rgba(8,5,12,.96) 38%,rgba(8,5,12,.72) 68%,transparent);}
 .drink--foto .drink__nome{text-shadow:0 1px 12px rgba(8,5,12,.55);}
+
+/* ===== LEGIBILIDADE - 2a rodada (consultor: "ainda ruim, sem dar zoom") =====
+   MEDIDO antes de mexer: o contraste ja passava em tudo (4,66 a 15,56 num
+   minimo de 4,5), entao escurecer mais nao resolveria. O problema real e
+   TAMANHO: havia uma camada inteira de texto entre 8px e 11px, quase toda em
+   CAIXA ALTA com tracking largo -- que a essa altura apaga a forma da palavra
+   e desgruda as letras. As tres alavancas abaixo, nesta ordem: corpo, caixa
+   alta so onde e rotulo curto, e tracking menor. */
+
+/* 1. PISO DE CORPO: nada informativo abaixo de ~13px */
+.nivel__res,.nivel__inclui,.nivel__preco small,.carta__n,.carrossel__hint,
+.drink__tag,.drink__sa,.legenda,.legenda__txt,.eyebrow,
+.nivel[aria-pressed="true"]::after{font-size:.84rem;}
+.drink__tag,.drink__sa,.nivel[aria-pressed="true"]::after{font-size:.78rem;}
+
+/* 2. TRACKING: caixa alta larga a 9px era o pior caso; corta pela metade */
+.eyebrow{letter-spacing:.16em;}
+.carrossel__hint,.carta__nome{letter-spacing:.12em;}
+.drink__tag,.drink__sa,.carta__n,.nivel__preco small,
+.nivel[aria-pressed="true"]::after{letter-spacing:.08em;}
+
+/* 3. FRASE LONGA SAI DA CAIXA ALTA (rotulo curto continua em caps: e assinatura
+      visual do material). Estas duas sao frases, nao rotulos: */
+.nivel__res,.nivel__inclui{text-transform:none;letter-spacing:.01em;line-height:1.5;font-weight:500;}
+.nivel__res{color:var(--ink);}
+.legenda,.legenda__txt{text-transform:none;letter-spacing:.01em;font-weight:500;color:var(--ink-soft);}
+
+/* 4. O QUE O CLIENTE PROCURA NO CARD: nome e preco. Sobem de patamar. */
+/* o card tem ~247px uteis: acima de ~1.62rem o "Open Extra Premium" quebra em
+   duas linhas e desalinha a fileira. O ganho vem do peso 700, nao do corpo. */
+.nivel__nome{font-size:clamp(1.4rem,2vw,1.62rem);font-weight:700;}
+/* "por pessoa" em linha propria: colado no preco ele quebrava sozinho */
+.nivel__preco{font-size:1.34rem;font-weight:700;display:block;line-height:1.25;}
+.nivel__preco small{display:block;margin-left:0;margin-top:.1rem;font-weight:500;color:var(--ink-soft);}
+
+/* 5. CARD BRANCO: nao e ganho de contraste (ja passava) e sim de SEPARACAO --
+      o bloco descola do creme da pagina e o olho agrupa cada pacote sozinho. */
+.nivel{background:#FFFDFB;border-color:rgba(26,23,20,.22);padding:1.5rem 1.35rem 1.35rem;}
+.nivel[aria-pressed="true"]{background:linear-gradient(160deg,rgba(192,138,87,.14),#FFFDFB 60%);
+  border-color:var(--accent);box-shadow:0 2px 0 var(--accent);}
+
+/* 6. peso nos textos corridos que sobraram em 300 */
+.sec__lead,.nota,.drink__ing,.valor__txt{font-weight:500;}
+.nota{font-size:.98rem;color:var(--ink);}
+
+/* 7. residuos: rotulos que ficaram em peso 300 e os dois ultimos corpos <13px */
+.drink__sa,.drink__tag,.carta__n,.carrossel__hint{font-weight:500;}
+.drink__ing{font-size:.84rem;line-height:1.5;}
+.carta__nome{font-size:.84rem;}
+.drink__tag{color:rgba(240,232,220,.78);}
 </style>
 </head>
 <body>
