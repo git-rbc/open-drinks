@@ -487,6 +487,24 @@ a{color:inherit;}
 .trilho .drink__nome{font-size:clamp(1.5rem,2.6vw,2.05rem);}
 .trilho .drink__ing{font-size:clamp(.86rem,1.1vw,.98rem);}
 .trilho .drink__cap{padding:1.1rem 1.5rem 1.4rem;}
+/* ===== CARD DE PACOTE MAIOR (3a rodada — ref: cards do cardapio de doces) =====
+   Medido no doces a 1280px: card 218x449, padding 27/23, gap interno 9, nome
+   25,6px, preco 22px e -- o que faz a diferenca -- a CONTAGEM em serifada de
+   34px, que ali e a maior coisa do card. O nosso mostrava "10 drinks" como
+   texto corrido de 13px, por isso parecia pequeno mesmo com tudo legivel. */
+.menus .nivel{padding:1.7rem 1.45rem 1.45rem;gap:.56rem;}
+.nivel__qtd{display:block;font-family:var(--serif);font-size:clamp(1.85rem,2.6vw,2.15rem);
+  font-weight:700;line-height:1.05;margin:.2rem 0 .15rem;
+  font-variant-numeric:lining-nums tabular-nums;}
+.nivel__res{font-size:.92rem;line-height:1.45;}
+.menus .nivel__inclui{padding-top:.85rem;margin-top:auto;}
+/* o que da a sensacao de "grande" no doces nao e so o corpo da letra: e a
+   ALTURA. La o card tem 449px de altura pra 218 de largura. Com min-height o
+   bloco ganha presenca e o "Inclui" desce pro rodape (margin-top:auto), que e
+   exatamente o arranjo do print. So a partir de 2 colunas -- no celular cada
+   card empilha e altura fixa viraria rolagem a toa. */
+@media(min-width:561px){ .menus .nivel{min-height:clamp(21rem,25vw,25rem);} }
+
 /* nav invertido enquanto passa por bloco escuro */
 .nav.scrolled.sobre-escuro{background:rgba(20,16,25,.85);border-color:var(--line-light);}
 .nav.scrolled.sobre-escuro .nav__logo{filter:none;}
@@ -838,7 +856,7 @@ PACOTES.forEach(p=>{
   b.type='button'; b.className='nivel'; b.dataset.id=p.id; b.setAttribute('aria-pressed','false');
   b.innerHTML = `<p class="nivel__nome">${p.nome}</p>
     <p class="nivel__preco">a partir de ${p.de}<small>por pessoa</small></p>
-    <p class="nivel__res">${doPacote.length} drinks<br>${nSA} também sem álcool</p>`
+    <p class="nivel__res"><span class="nivel__qtd">${doPacote.length} drinks</span>${nSA} também sem álcool</p>`
     + (p.inclui ? `<p class="nivel__inclui">${p.inclui}</p>` : `<p class="nivel__inclui">O pacote que abre a experiência</p>`);
   b.addEventListener('click',()=>selecionar(p.id,true));
   grid.appendChild(b);
