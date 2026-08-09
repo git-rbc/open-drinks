@@ -464,7 +464,11 @@ a{color:inherit;}
 .menus .nivel[aria-pressed="true"] .nivel__res{color:var(--ink);}
 .menus .nivel[aria-pressed="true"] .nivel__preco{color:var(--accent-txt);}
 .menus .nivel[aria-pressed="true"] .nivel__preco small{color:var(--ink-soft);}
-.menus .nivel[aria-pressed="true"] .nivel__inclui{color:var(--accent-txt);border-top-color:var(--line-dark);}
+/* terracota sobre o creme do card selecionado da so 2,46:1 -- reprova */
+.menus .nivel[aria-pressed="true"] .nivel__qtd small{color:var(--ink-soft);}
+/* #8F6134 sobre o creme da so 4,40 (precisa 4,5). #7A5129 da 5,69 e mantem a
+   terracota -- e o mesmo accent-txt do cardapio de buffet. */
+.menus .nivel[aria-pressed="true"] .nivel__inclui{color:#7A5129;border-top-color:var(--line-dark);}
 
 /* lista completa e nota, no escuro */
 .menus .carta__head{border-top-color:var(--cream);}
@@ -500,6 +504,16 @@ a{color:inherit;}
   font-weight:700;line-height:1.05;margin:.2rem 0 .15rem;
   font-variant-numeric:lining-nums tabular-nums;}
 .nivel__res{font-size:.92rem;line-height:1.45;}
+/* rotulo colado no numero, igual o "por pessoa" do doces. O "deles" na linha
+   de baixo e o que impede o cliente ler 10+6=16: os sem alcool sao os MESMOS
+   drinks preparados sem alcool, nao drinks a mais. */
+/* o <b> segura "10 drinks" inteiro: sem ele o card estreito quebrava entre o
+   numero e a palavra ("10" numa linha, "drinks" na outra). O rotulo desce
+   sozinho pra segunda linha quando nao cabe, e ai fica limpo. */
+.nivel__qtd b{white-space:nowrap;font-weight:inherit;}
+.nivel__qtd small{font-family:var(--sans);font-size:.78rem;letter-spacing:.08em;
+  text-transform:uppercase;font-weight:500;margin-left:.55rem;white-space:nowrap;
+  color:var(--accent);}
 .menus .nivel__inclui{padding-top:.85rem;margin-top:auto;}
 /* o que da a sensacao de "grande" no doces nao e so o corpo da letra: e a
    ALTURA. La o card tem 449px de altura pra 218 de largura. Com min-height o
@@ -866,7 +880,7 @@ PACOTES.forEach(p=>{
   b.type='button'; b.className='nivel'; b.dataset.id=p.id; b.setAttribute('aria-pressed','false');
   b.innerHTML = `<p class="nivel__nome">${p.nome}</p>
     <p class="nivel__preco">a partir de ${p.de}<small>por pessoa</small></p>
-    <p class="nivel__res"><span class="nivel__qtd">${doPacote.length} drinks</span>${nSA} também sem álcool</p>`
+    <p class="nivel__res"><span class="nivel__qtd"><b>${doPacote.length} drinks</b><small>com álcool</small></span>${nSA} deles também sem álcool</p>`
     + (p.inclui ? `<p class="nivel__inclui">${p.inclui}</p>` : `<p class="nivel__inclui">O pacote que abre a experiência</p>`);
   b.addEventListener('click',()=>selecionar(p.id,true));
   grid.appendChild(b);
