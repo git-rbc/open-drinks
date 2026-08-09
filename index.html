@@ -378,7 +378,10 @@ a{color:inherit;}
 .drink__nome,.carta li{font-weight:700;}
 
 /* 2. corpo maior -- peso resolve metade, tamanho resolve o resto */
-.carta li{font-size:1.16rem;line-height:1.35;}
+/* 09/08: o consultor comparou com a lista do coquetel e pediu o MESMO corpo.
+   La sao 29,16px (html 18px x 1,62rem); aqui a raiz e 16px, entao 1,82rem
+   da o mesmo tamanho na tela. line-height 1,28 = a proporcao de la. */
+.carta li{font-size:1.82rem;line-height:1.28;}
 .drink__nome{font-size:1.42rem;}
 
 /* 3. a lista respira mais, pra bold nao virar parede de texto */
